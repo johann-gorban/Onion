@@ -1,2 +1,2 @@
-# IU-IT-bootcamp
+# Push in main
 репозиторий для IT-выезда

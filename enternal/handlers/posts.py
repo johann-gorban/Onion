@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
 from services.domains import Publication
 
 post_router = APIRouter()

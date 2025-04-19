@@ -7,10 +7,7 @@ main_routesr = Router(name="main")
 
 @main_routesr.message(CommandStart())
 async def start(message: Message) -> None:
-    await message.bot.send_message(
-        message.chat.id,
-        "да ну наху"
-    )
+    await message.bot.send_message(message.chat.id, "да ну наху")
 
 
 @main_routesr.message(Command("/help"))

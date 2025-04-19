@@ -39,9 +39,7 @@ def setup_logging() -> None:  # TODO
     main_logger = logging.getLogger(BOT_LOGGER)
     main_logger.setLevel(logging.INFO)
 
-    standard_formatter = logging.Formatter(
-        STANDART_FORMAT, datefmt=DATE_FORMAT
-    )
+    standard_formatter = logging.Formatter(STANDART_FORMAT, datefmt=DATE_FORMAT)
     # error_formatter = logging.Formatter(
     #     "%(asctime)s | %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s",  # noqa: E501
     #     datefmt="%d-%m-%Y %H:%M:%S",

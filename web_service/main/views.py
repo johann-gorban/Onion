@@ -27,36 +27,58 @@ def publication(request):
 @role_required('write')  # Требует права на запись (роль 'write')
 def create_publication(request):
     """Страница создания публикации."""
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        main_image_url = request.POST.get('main_image_url')
+        author_id = request.POST.get('author_id')
+        organization_id = request.POST.get('organization_id')
+        created_at = request.POST.get('created_at')
     return render(request, "create_publication.html")
 
 
 @role_required('write')  # Требует права на запись (роль 'write')
 def remove_publication(request):
     """Страница удаления публикации."""
+    if request.method == 'POST':
+        id = request.POST.get('id')
     return render(request, "remove_publication.html")
 
 
 @role_required('moderator')  # Требует прав модератора
 def create_organization(request):
     """Страница создания организации."""
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        image_url = request.POST.get('image_url')
     return render(request, "create_organization.html")
 
 
 @role_required('moderator')  # Требует прав модератора
 def remove_organization(request):
     """Страница удаления организации."""
+    if request.method == 'POST':
+        id = request.POST.get('id')
     return render(request, "remove_organizations.html")
 
 
 @role_required('moderator')  # Требует прав модератора
 def register_writer(request):
     """Страница регистрации писателя."""
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        name = request.POST.get('organization_id')
     return render(request, "register_writer.html")
 
 
 @role_required('moderator')  # Требует прав модератора
 def delete_writer(request):
     """Страница удаления писателя."""
+    if request.method == 'POST':
+        id = request.POST.get('id')
     return render(request, "delete_writer.html")
 
 

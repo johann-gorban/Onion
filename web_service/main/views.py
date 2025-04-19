@@ -5,7 +5,9 @@ from django.core.files.storage import default_storage
 
 
 def index_page(request):
-    """Главная страница. Возвращает простой ответ 'Ok' для проверки работы сервера."""
+    """
+    Главная страница. Возвращает простой ответ 'Ok' для проверки работы сервера
+    """
     return render(request, "index.html")
 
 
@@ -14,12 +16,12 @@ def searching_publications(request):
     return render(request, "searching_page.html")
 
 
-def organizations_list(request):
-    """Страница со списком организаций. Рендерит шаблон organizations_list.html."""
-    return render(request, "organizations_list.html")
+def posts_list(request):
+    """Страница со списком организаций. Рендерит шаблон postss_list.html."""
+    return render(request, "postss_list.html")
 
 
-def publication(request):
+def view_posts(request):
     """Страница публикации. Передает данные в шаблон publication.html."""
     data = dict()  # Заглушка для будущих данных
     return render(request, "publication.html")
@@ -33,8 +35,6 @@ def create_publication(request):
         content = request.POST.get('content')
         main_image_url = request.FILES.get('logo')
 
-        # if main_image_url:
-
     return render(request, "create_publication.html")
 
 
@@ -47,7 +47,7 @@ def remove_publication(request):
 
 
 @role_required('moderator')  # Требует прав модератора
-def create_organization(request):
+def create_posts(request):
     """Страница создания организации."""
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -55,22 +55,22 @@ def create_organization(request):
         image_url = request.FILES['logo']
         print(image_url)
         # path = default_storage.save('uploads/' + image_url.name, image_url)
-    return render(request, "create_organization.html")
+    return render(request, "create_posts.html")
 
 
 @role_required('moderator')  # Требует прав модератора
-def remove_organization(request):
+def remove_posts(request):
     """Страница удаления организации."""
     if request.method == 'POST':
         id = request.POST.get('id')
-    return render(request, "remove_organizations.html")
+    return render(request, "remove_postss.html")
 
 
 @role_required('moderator')  # Требует прав модератора
 def create_writer(request):
     """Страница регистрации писателя."""
     if request.method == 'POST':
-        name = request.POST.get('organization_id')
+        name = request.POST.get('posts_id')
     return render(request, "register_writer.html")
 
 

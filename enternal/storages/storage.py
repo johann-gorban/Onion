@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from services.models import (
+from storages.models import (
     Company,
     Publication,
     Subscriber,
@@ -95,7 +95,5 @@ class Database(ABC):
         pass
 
     @abstractmethod
-    async def get_subscription_by_id(
-        self, id: str
-    ) -> Subscription:
+    async def get_subscription_by_id(self, id: str) -> Subscription:
         pass

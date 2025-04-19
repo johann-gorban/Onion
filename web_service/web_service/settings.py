@@ -124,3 +124,7 @@ MEDIA_URL = 'media/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Настройки сессии
+SESSION_COOKIE_AGE = 1209600  # 2 недели
+SESSION_SAVE_EVERY_REQUEST = True

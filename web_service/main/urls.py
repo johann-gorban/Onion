@@ -1,10 +1,14 @@
 from django.urls import path
 from main import views
+from main.auth_views import (
+    login_view, logout_view, register_view
+)
 
 urlpatterns = [
     path('', views.index_page, name='home'),
-    path('/posts/search/', views.searching_publications, name='searching_publications'),
-    path('/organizations/', views.organizations_list, name='organizations_list'),
+    path('posts/search/', views.searching_publications,
+         name='searching_publications'),
+    path('organizations/', views.organizations_list, name='organizations_list'),
 
     path('/posts/id/', views.publication, name='publication'),
     path('/posts/create/', views.create_publication, name='create_publication'),
@@ -13,7 +17,10 @@ urlpatterns = [
     path('/organizations/create/', views.create_organization, name='create_organization'),
     path('/organizations/delete/id/', views.remove_organization, name='remove_organization'),
 
-    path('/writer/register/', views.register_writer, name="register_writer"),
-    path('/writer/delete/', views.delete_writer, name="delete_writer")
+    path('writer/register/', views.register_writer, name="register_writer"),
+    path('writer/delete/', views.delete_writer, name="delete_writer"),
 
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('register/', register_view, name='register'),
 ]

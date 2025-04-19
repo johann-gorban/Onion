@@ -21,12 +21,10 @@ class Publication(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime)
 
     # Foreign keys
-    author_id: Mapped[str] = mapped_column(String, ForeignKey("Authors.id"))
-    company_id: Mapped[str] = mapped_column(String, ForeignKey("Companies.id"))
+    author_id: Mapped[str] = mapped_column(String, ForeignKey("Users.id"))
 
     # Relationships
-    author: Mapped["Author"] = relationship(back_populates="publications")
-    company: Mapped["Company"] = relationship(back_populates="publications")
+    author: Mapped["User"] = relationship(back_populates="publications")
 
 
 class Company(Base):
@@ -37,64 +35,25 @@ class Company(Base):
     image_url: Mapped[str] = mapped_column(String)
 
     # Relationships
-    publications: Mapped[list["Publication"]] = relationship(
-        back_populates="company"
-    )
-    authors: Mapped[list["Author"]] = relationship(back_populates="company")
+    authors: Mapped[list["User"]] = relationship(back_populates="company")
     subscriptions: Mapped[list["Subscription"]] = relationship(
         back_populates="company"
     )
 
-    def to_json(self, include_relationships: bool = True) -> dict[str, Any]:
-        result = {
-            "id": self.id,
-            "name": self.name,
-            "description": self.description,
-            "image_url": self.image_url,
-        }
 
-        if include_relationships:
-            result.update(
-                {
-                    "publications": [
-                        p.to_json(include_relationships=False)
-                        for p in self.publications
-                    ],
-                    "authors": [
-                        a.to_json(include_relationships=False)
-                        for a in self.authors
-                    ],
-                    "subscriptions": [
-                        s.to_json(include_relationships=False)
-                        for s in self.subscriptions
-                    ],
-                }
-            )
-        return
-
-
-class UserBase:
+class User(Base):
+    __tablename__ = "Users"
     id: Mapped[str] = mapped_column(String, primary_key=True)
-    first_name: Mapped[str] = mapped_column(String)
-    last_name: Mapped[str] = mapped_column(String)
     login: Mapped[str] = mapped_column(String)
     password: Mapped[str] = mapped_column(String)
     role: Mapped[str] = mapped_column(String)
-
-
-class Author(UserBase, Base):
-    __tablename__ = "Authors"
-    company_id: Mapped[str] = mapped_column(String, ForeignKey("Companies.id"))
+    company_id: Mapped[str] = mapped_column(
+        String, ForeignKey("Companies.id"), nullable=True
+    )
 
     # Relationships
     company: Mapped["Company"] = relationship(back_populates="authors")
-    publications: Mapped[list["Publication"]] = relationship(
-        back_populates="author"
-    )
-
-
-class Moderator(UserBase, Base):
-    __tablename__ = "Moderators"
+    publications: Mapped["Publication"] = relationship(back_populates="author")
 
 
 class Subscriber(Base):
@@ -111,7 +70,7 @@ class Subscriber(Base):
 class Subscription(Base):
     __tablename__ = "Subscriptions"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    subscriber_id: Mapped[int] = mapped_column(
+    subscriber_id: Mapped[str] = mapped_column(
         Integer, ForeignKey("Subscribers.id")
     )
     company_id: Mapped[str] = mapped_column(String, ForeignKey("Companies.id"))

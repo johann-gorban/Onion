@@ -1,7 +1,7 @@
 from django.urls import path
 from main import views
 from main.auth_views import (
-    login, logout
+    writer_login, moderator_login, logout
 )
 
 urlpatterns = [
@@ -9,17 +9,19 @@ urlpatterns = [
     path('posts/search/', views.search_posts, name='search_posts'),
     path('posts/<str:post_id>/', views.view_post, name='view_post'),
     path('posts/create/', views.create_post, name='create_post'),
-    path('posts/delete/<str:post_id>/', views.delete_post, name='delete_post'),
+    path('posts/delete/', views.delete_post, name='delete_post'),
+    path('posts/update/<str:post_id>/', views.update_post, name='update_post'),
 
     path('organizations/create/', views.create_organization,
          name='create_organization'),
-    path('organizations/delete/<str:organization_id>/',
+    path('organizations/delete/',
          views.delete_organization, name='delete_organization'),
     path('organizations/', views.view_organizations, name='organizations_list'),
 
     path('writer/create/', views.create_writer, name="create_writer"),
     path('writer/delete/', views.delete_writer, name="delete_writer"),
-    path('login/<str:user_role>/', login, name='login'),
+    path('writer/login/', writer_login, name='writer_login'),
+    path('moderator/login/', moderator_login, name='moderator_login'),
 
     path('logout/', logout, name='logout'),
 ]

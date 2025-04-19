@@ -2,7 +2,15 @@ from django.shortcuts import render, redirect
 from typing import Literal
 
 
-def login(request, user_role: str = Literal['writer', 'moderator']):
+def writer_login(request):
+    return login(request, "writer")
+
+
+def moderator_login(request):
+    return login(request, "moderator")
+
+
+def login(request, user_role: Literal['writer', 'moderator']):
     """
     Функция для авторизации пользователей и присваение им определенной роли
     """

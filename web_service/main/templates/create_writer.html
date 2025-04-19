@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Регистрация</h2>
+<h2>Создание писателя</h2>
 {% if error %}
 <div class="alert alert-danger">{{ error }}</div>
 {% endif %}
@@ -15,7 +15,10 @@
         <label for="password">Пароль:</label>
         <input type="password" id="password" name="password" required>
     </div>
-    <button type="submit">Зарегистрироваться</button>
+    <div>
+        <label for="organization">организация:</label>
+        <input type="text" id="organization" name="organization" required>
+    </div>
+    <button type="submit">Войти</button>
 </form>
-<p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
 {% endblock %}

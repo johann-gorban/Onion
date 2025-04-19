@@ -132,8 +132,17 @@ SESSION_SAVE_EVERY_REQUEST = True
 # Указываем использовать S3-совместимое хранилище
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# Настройки MinIO (совместимого с S3 API)
-AWS_ACCESS_KEY_ID = 'minioadmin'
-AWS_SECRET_ACCESS_KEY = 'minioadmin'
-AWS_STORAGE_BUCKET_NAME = 'django-media'
-AWS_S3_ENDPOINT_URL = 'http://localhost:9001/'
+# MinIO configuration
+MINIO_ENDPOINT = 'localhost:9000'
+MINIO_ACCESS_KEY = 'admin_key'
+MINIO_SECRET_KEY = 'admin_key'
+MINIO_USE_HTTPS = False
+MINIO_BUCKET_NAME = 'django-media'  # имя вашего бакета
+
+# Настройки для django-storages
+AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
+AWS_STORAGE_BUCKET_NAME = MINIO_BUCKET_NAME
+AWS_S3_ENDPOINT_URL = f'http://{MINIO_ENDPOINT}'  # Полный URL с http://
+AWS_S3_USE_SSL = MINIO_USE_HTTPS
+AWS_S3_FILE_OVERWRITE = False

@@ -5,19 +5,19 @@
 {% if error %}
 <div class="alert alert-danger">{{ error }}</div>
 {% endif %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div>
-        <label for="name">Имя организации:</label>
+        <label for="name">Название организации</label>
         <input type="text" id="name" name="name" required>
     </div>
     <div>
-        <label for="description">Описание организации:</label>
+        <label for="description">Описание:</label>
         <input type="text" id="description" name="description" required>
     </div>
     <div>
-        <label for="logo">Логотип организации:</label>
-        <input type="file" id="logo" name="logo" accept="image/*">
+        <label for="image">Изображение:</label>
+        <input type="file" id="image" name="image">
     </div>
     <button type="submit">Войти</button>
 </form>

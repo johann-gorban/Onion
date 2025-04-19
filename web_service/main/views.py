@@ -3,20 +3,32 @@ from main.decorators import role_required
 from django.conf import settings
 from minio import Minio
 from minio.error import S3Error
+<<<<<<< HEAD
 from bcrypt import bcrypt
+=======
+import bcrypt
+>>>>>>> 1472cc6c6ed70c85b3620feee19d509f390d9bac
 import json
 import uuid
 
 ENCODING = 'utf-8'
 ROUNDS = 12
 
+
 def view_index(request):
     """Главная страница"""
-    data = dict()
+    data = {
+        "posts": [
+            {
+                "name": "test",
+                "descript": "test"
+            }
+        ]
+    }
     if not request.session:
         data = {
             "user_id": request.session["id"],
-            "user_role": request.session["role"]
+            "user_role": request.session["role"],
         }
     return render(request, "index.html", context=data)
 
@@ -29,7 +41,16 @@ def search_posts(request):
 def view_post(request, post_id):
     """Страница публикации"""
     if request.method == 'POST':
+<<<<<<< HEAD
         temp_data = {0: ["name", "descript"], 1: ["name1", "descript1"], 2: ["name2", "descript2"]} # Временная заглушка для тестирования
+=======
+        temp_data = {
+            0: ["name", "descript"],
+            1: ["name1", "descript1"],
+            2: ["name2", "descript2"]
+        }
+
+>>>>>>> 1472cc6c6ed70c85b3620feee19d509f390d9bac
         posts = json.dumps(temp_data[post_id], ensure_ascii=False)
     return render(request, "post.html")
 
@@ -41,6 +62,7 @@ def create_post(request):
         title = request.POST.get('title')
         content = request.POST.get('content')
         print(title, content)
+        # отправляем запрос на сервер на создание публикации
 
     return render(request, "create_post.html")
 
@@ -51,6 +73,7 @@ def delete_post(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
         print(post_id)
+        # запрос на удаление поста по id
     return HttpResponse("Ok")
 
 
@@ -59,7 +82,10 @@ def update_post(request):
     """Страница обновления публикации."""
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
-        print(post_id)
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+
+        # update_post_by_id
     return HttpResponse("Ok")
 
 
@@ -83,7 +109,7 @@ def create_organization(request):
 
             try:
                 minio_client = Minio(
-                    settings.MINIO_ENDPOINT,  # 'localhost:9000'
+                    settings.MINIO_ENDPOINT,
                     access_key=settings.MINIO_ACCESS_KEY,
                     secret_key=settings.MINIO_SECRET_KEY,
                     secure=settings.MINIO_USE_HTTPS
@@ -121,6 +147,7 @@ def delete_organization(request):
     """Удаление организации"""
     if request.method == 'POST':
         organization_id = request.POST.get('organization_id')
+        # удаление организации по id
         print(organization_id)
 
     return HttpResponse("Ok")
@@ -128,6 +155,7 @@ def delete_organization(request):
 
 def view_organizations(request):
     """Просмотр всех доступных организаций"""
+    # get_all_organizations
     return render(request, "organization.html")
 
 
@@ -138,7 +166,9 @@ def create_writer(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         organization = request.POST.get('organization')
-        password = bcrypt.hashpw(password.encode(ENCODING), bcrypt.gensalt(rounds=ROUNDS))
+        password = bcrypt.hashpw(
+            password.encode(ENCODING), bcrypt.gensalt(rounds=ROUNDS)
+        )
         print(username, password, organization)
     return render(request, "create_writer.html")
 

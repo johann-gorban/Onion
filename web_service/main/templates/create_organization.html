@@ -1,18 +1,24 @@
-<link rel="stylesheet" href="css/index.css">
+{% extends "base.html" %}
 
-<div class="form-container">
-    <h1>Создание организации</h1>
-    
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="name">Название организации</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-        
-        <div class="form-actions">
-            <button type="submit" class="btn success">Создать</button>
-            <a href="{% url 'organizations_list' %}" class="btn secondary">Отмена</a>
-        </div>
-    </form>
-</div>
+{% block content %}
+<h2>Создание организации</h2>
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    <div>
+        <label for="name">Имя организации:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+        <label for="description">Описание организации:</label>
+        <input type="text" id="description" name="description" required>
+    </div>
+    <div>
+        <label for="logo">Логотип организации:</label>
+        <input type="file" id="logo" name="logo" accept="image/*">
+    </div>
+    <button type="submit">Войти</button>
+</form>
+{% endblock %}

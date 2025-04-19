@@ -3,13 +3,13 @@ from django.http import HttpResponse
 
 
 def index_page(request):
-    return HttpResponse("Ok")
+    return render(request, "index.html")
 
 def main_page(request):
     return render(request, "main_page.html")
 
 def searching_publications(request):
-    return render(request, "searching_page.html")
+    return HttpResponse("Это поиск")
 
 def organizations_list(request):
     return render(request, "organizations_list.html")
@@ -28,6 +28,10 @@ def remove_publication(request):
     return render(request, "remove_publication.html")
 
 def create_organization(request):
+    print(
+        request.session['user_id'],
+        request.session['user_role']
+    )
     return render(request, "create_organization.html")
 
 def remove_organization(request):
@@ -38,5 +42,3 @@ def register_writer(request):
 
 def delete_writer(request):
     return render(request, "delete_writer.html")
-
-

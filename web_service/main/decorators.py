@@ -15,12 +15,7 @@ def role_required(*roles):
         @login_required
         def _wrapped_view(request, *args, **kwargs):
             # user = external_db.get_user_by_id(request.session['user_id'])
-
-            user = {
-                "role": "moderator"
-            }
-
-            if not user or user["role"] not in roles:
+            if request.session['user_role'] not in roles:
                 return HttpResponseForbidden("Доступ запрещен")
             return view_func(request, *args, **kwargs)
         return _wrapped_view

@@ -182,3 +182,4 @@ pyrightconfig.json
 .rdb
 .aof
 redisdata/
+.DS_Store

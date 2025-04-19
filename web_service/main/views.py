@@ -31,8 +31,7 @@ def create_publication(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        main_image_url = request.FILES.get('main_image_url')
-        path = default_storage.save('uploads/' + main_image_url.name, main_image_url)
+        main_image_url = request.FILES.get('logo')
 
         # if main_image_url:
 
@@ -51,7 +50,6 @@ def remove_publication(request):
 def create_organization(request):
     """Страница создания организации."""
     if request.method == 'POST':
-        id = request.POST.get('id')
         name = request.POST.get('name')
         description = request.POST.get('description')
         image_url = request.FILES['logo']
@@ -72,7 +70,6 @@ def remove_organization(request):
 def register_writer(request):
     """Страница регистрации писателя."""
     if request.method == 'POST':
-        id = request.POST.get('id')
         name = request.POST.get('organization_id')
     return render(request, "register_writer.html")
 

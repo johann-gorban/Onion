@@ -11,7 +11,9 @@ from bot.base.dispatcher import create_dispatcher, setup_routers
 from bot.config import Config
 from bot.logger import BOT_LOGGER, setup_logging
 from bot.routers import routers
+
 from bot.store.database.db import Database
+
 
 __all__ = (
     "ITSBot",

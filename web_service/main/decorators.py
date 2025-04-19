@@ -1,15 +1,27 @@
-def role_required(role_name):
+from django.shortcuts import redirect
+from django.http import HttpResponseForbidden
+
+
+def login_required(view_func):
+    def _wrapped_view(request, *args, **kwargs):
+        if 'user_id' not in request.session:
+            return redirect('/login/')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
+
+def role_required(*roles):
     def decorator(view_func):
+        @login_required
         def _wrapped_view(request, *args, **kwargs):
-            if 'user_id' not in request.session:
-                return redirect('/login/')
+            # user = external_db.get_user_by_id(request.session['user_id'])
 
-            user_id = request.session['user_id']
-            user = get_user_from_your_db(user_id)  # Ваша функция для получения пользователя
+            user = {
+                "role": "moderator"
+            }
 
-            if user.role != role_name:  # Проверяем роль
-                return HttpResponse("Доступ запрещен", status=403)
-
+            if not user or user["role"] not in roles:
+                return HttpResponseForbidden("Доступ запрещен")
             return view_func(request, *args, **kwargs)
         return _wrapped_view
     return decorator

@@ -1,9 +1,11 @@
 from django.urls import path
 from main import views
+from main.auth_views import (
+    login_view, logout_view, register_view
+)
 
 urlpatterns = [
     path('', views.index_page, name='home'),
-<<<<<<< HEAD
     path('posts/search/', views.searching_publications,
          name='searching_publications'),
     path('organizations/', views.organizations_list, name='organizations_list'),
@@ -19,10 +21,9 @@ urlpatterns = [
          views.remove_organization, name='remove_organization'),
 
     path('writer/register/', views.register_writer, name="register_writer"),
-    path('writer/delete/', views.delete_writer, name="delete_writer")
+    path('writer/delete/', views.delete_writer, name="delete_writer"),
 
-=======
-    path('/user/login', views.login, name='login'),
-    path('/user/logout', views.logout, name='logout'),
->>>>>>> dev-kirills
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('register/', register_view, name='register'),
 ]

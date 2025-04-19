@@ -30,6 +30,9 @@ def remove_publication(request):
 def create_organization(request):
     return render(request, "create_organization.html")
 
+def remove_organization(request):
+    return render(request, "remove_organizations.html")
+
 def register_writer(request):
     return render(request, "register_writer.html")
 

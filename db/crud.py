@@ -6,8 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess
 from sqlalchemy import create_engine, update, and_
 from sqlalchemy.future import select
 
-from models import Base, Company, Publication, Author, Moderator
-from config import DB_PATH
+from .models import Base, Company, Publication, Author, Moderator
+from .config import DB_PATH
 
 import asyncio
 
@@ -22,7 +22,6 @@ class Database:
         db_file = self.db_name.split(':///')[-1]
         if not os.path.exists(db_file):
             async with self.engine.begin() as conn:
-                print("Hello")
                 await conn.run_sync(Base.metadata.create_all)
 
 

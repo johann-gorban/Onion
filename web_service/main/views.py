@@ -9,6 +9,7 @@ import uuid
 ENCODING = 'utf-8'
 ROUNDS = 12
 
+
 def view_index(request):
     """Главная страница"""
     data = dict()
@@ -136,7 +137,8 @@ def create_writer(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         organization = request.POST.get('organization')
-        password = bcrypt.hashpw(password.encode(ENCODING), bcrypt.gensalt(rounds=ROUNDS))
+        password = bcrypt.hashpw(password.encode(
+            ENCODING), bcrypt.gensalt(rounds=ROUNDS))
         print(username, password, organization)
     return render(request, "create_writer.html")
 

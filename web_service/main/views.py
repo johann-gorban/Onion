@@ -67,7 +67,7 @@ def remove_organization(request):
 
 
 @role_required('moderator')  # Требует прав модератора
-def register_writer(request):
+def create_writer(request):
     """Страница регистрации писателя."""
     if request.method == 'POST':
         name = request.POST.get('organization_id')

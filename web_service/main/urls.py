@@ -15,8 +15,8 @@ urlpatterns = [
 
     path('posts/<str:id>/', views.publication, name='publication'),
     path('posts/create/', views.create_publication, name='create_publication'),
-    path('posts/delete/<str:id>/', views.remove_publication,
-         name='remove_publication'),
+    path('posts/delete/<str:id>/', views.remove_publication, name='remove_publication'),
+    path('posts/update/<str:id>', views.update_publication, name="update_publication"),
 
     path('organizations/create/', views.create_organization,
          name='create_organization'),

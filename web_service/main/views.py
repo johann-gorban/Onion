@@ -35,14 +35,19 @@ def create_publication(request):
 
     return render(request, "create_publication.html")
 
-
 @role_required('write')  # Требует права на запись (роль 'write')
 def remove_publication(request):
     """Страница удаления публикации."""
     if request.method == 'POST':
-        id = request.POST.get('id')
+        post_id = request.POST.get('id')
     return render(request, "remove_publication.html")
 
+@role_required('write')  # Требует права на запись (роль 'write')
+def update_publication(request):
+    """Страница обновления публикации."""
+    if request.method == 'POST':
+        post_id = request.POST.get('id')
+    return render(request, "remove_publication.html")
 
 @role_required('moderator')  # Требует прав модератора
 def create_organization(request):
@@ -60,7 +65,7 @@ def create_organization(request):
 def remove_organization(request):
     """Страница удаления организации."""
     if request.method == 'POST':
-        id = request.POST.get('id')
+        user_id = request.POST.get('id')
     return render(request, "remove_organizations.html")
 
 
@@ -68,7 +73,7 @@ def remove_organization(request):
 def create_writer(request):
     """Страница регистрации писателя."""
     if request.method == 'POST':
-        name = request.POST.get('organization_id')
+        user_id = request.POST.get('id')
     return render(request, "register_writer.html")
 
 
@@ -76,5 +81,5 @@ def create_writer(request):
 def delete_writer(request):
     """Страница удаления писателя."""
     if request.method == 'POST':
-        id = request.POST.get('id')
+        user_id = request.POST.get('id')
     return render(request, "delete_writer.html")

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from main.decorators import role_required
 
@@ -49,3 +49,13 @@ def register_writer(request):
 @role_required('moderator')
 def delete_writer(request):
     return render(request, "delete_writer.html")
+
+
+def login(request):
+    request.session['user_id'] = user.id
+    return redirect('home')
+
+
+def logout(request):
+    del request.session['user_id']
+    return redirect('home')

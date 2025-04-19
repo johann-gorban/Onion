@@ -3,6 +3,7 @@ from main import views
 
 urlpatterns = [
     path('', views.index_page, name='home'),
+<<<<<<< HEAD
     path('posts/search/', views.searching_publications,
          name='searching_publications'),
     path('organizations/', views.organizations_list, name='organizations_list'),
@@ -20,4 +21,8 @@ urlpatterns = [
     path('writer/register/', views.register_writer, name="register_writer"),
     path('writer/delete/', views.delete_writer, name="delete_writer")
 
+=======
+    path('/user/login', views.login, name='login'),
+    path('/user/logout', views.logout, name='logout'),
+>>>>>>> dev-kirills
 ]

@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import List
 from uuid import uuid4
+from datetime import datetime
 import asyncio
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
@@ -10,7 +11,8 @@ from .models import Base, Company, Publication, User, Subscriber, Subscription
 from .config import CONTENT_AGREGATOR_DB 
 
 from .base_database import Database
-from .exceptions import UserExists, UserNotFound, CompanyNotFound
+from .exceptions import UserExists, UserNotFound, CompanyNotFound, SubscriptionExists, PublicationNotFound
+
 
 class ContentAgregatorDatabase(Database):
     def __init__(self):
@@ -26,29 +28,60 @@ class ContentAgregatorDatabase(Database):
                 await conn.run_sync(Base.metadata.create_all)  
 
 
-    async def add_subscription(self, telegram_id: str, company_id: str):
-        pass
+    async def get_publication(self, publication_id: str) -> Publication | None:
+        async with self.SessionLocal() as session:
+            stmt = select(Publication).where(Publication.id == publication_id)
+            result = await session.execute(stmt)
+            return result.scalar()
 
 
-    async def remove_subscription(self, telegram_id: str, company_id: str):
-        # subscriber = await self.get_subscriber(telegram_id)
-        # if subscriber is None:
-        #     raise UserNotFound
-        
-        # company = await self.get_company(company_id)
-        # if company is None:
-        #     raise CompanyNotFound
-        
-        # async with self.SessionLocal() as session:
-        #     stmt = delete(Subscription).where(
-        #         Subscription.subscriber_id.in_(
-        #             select(Subscriber.id)
-        #             .where(Subscriber.telegram_id == telegram_id)
-        #             .scalar_subquery()
-        #         )
-        #     )
-        #     result = await session.execute(stmt)
-        pass
+    async def get_publications(self) -> List[Publication]:
+        async with self.SessionLocal() as session:
+            stmt = select(Publication)
+            result = await session.execute(stmt)
+            return result.scalars()
+
+
+    async def remove_publication(self, publication_id: str) -> None:
+        publication = await self.get_publication(publication_id)
+        if publication is None:
+            raise PublicationNotFound
+        else:
+            async with self.SessionLocal() as session:
+                stmt = delete(Publication).where(Publication.id == publication_id)
+                await session.execute(stmt)
+                await session.commit()
+
+
+    async def add_publication(self, title: str, content: str, image_url: str, created_at: datetime, author_id: str) -> None:
+        publication_id = str(uuid4())
+        async with self.SessionLocal() as session:
+            publication = Publication(
+                id=publication_id, 
+                title=title, 
+                content=content, 
+                main_image_url=image_url, 
+                created_at=created_at, 
+                author_id=author_id
+            )
+            session.add(publication)
+            await session.commit()
+
+
+    async def update_publication(self, publication_id: str, title: str, content: str, image_url: str, created_at: datetime, author_id: str) -> None:
+        publication = await self.get_publication(publication_id)
+        if publication is None:
+            raise PublicationNotFound
+        else:
+            async with self.SessionLocal() as session:
+                publication.title = title
+                publication.content = content
+                publication.main_image_url = image_url
+                publication.created_at = created_at
+                publication.author_id = author_id
+
+                session.add(publication)
+                await session.commit()
 
 
     async def get_company(self, id: str) -> Company | None:
@@ -63,13 +96,6 @@ class ContentAgregatorDatabase(Database):
             stmt = select(Company)
             result = await session.execute(stmt)
             return result.scalars()
-
-
-    async def get_subscriber(self, id: str) -> Subscriber | None:
-        async with self.SessionLocal() as session:
-            stmt = select(Subscriber).where(Subscriber.id == id)
-            result = await session.execute(stmt)
-            return result.scalar()
 
 
     async def get_user_by_id(self, id: str) -> User | None:
@@ -100,11 +126,13 @@ class ContentAgregatorDatabase(Database):
         else:
             user_id = str(uuid4())
             async with self.SessionLocal() as session:
-                user = User(id=user_id, 
-                            login=login, 
-                            password=password, 
-                            role=role, 
-                            company_id=company_id)
+                user = User(
+                    id=user_id, 
+                    login=login, 
+                    password=password, 
+                    role=role, 
+                    company_id=company_id
+                )
                 session.add(user)
                 await session.commit()
 

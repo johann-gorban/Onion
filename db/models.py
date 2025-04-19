@@ -21,13 +21,11 @@ class Publication(Base):
 
     # Foreign keys
     author_id:      Mapped[str] = mapped_column(String, ForeignKey('Users.id'))
-    company_id:     Mapped[str] = mapped_column(String, ForeignKey('Companies.id'))
 
     # Relationships
     author:         Mapped['User'] = relationship(back_populates='publications')
-    company:        Mapped['Company'] = relationship(back_populates='publications')
 
-
+ 
 class Company(Base):
     __tablename__ = 'Companies'
     id:             Mapped[str] = mapped_column(String, primary_key=True)
@@ -36,7 +34,6 @@ class Company(Base):
     image_url:      Mapped[str] = mapped_column(String)
 
     # Relationships
-    publications:   Mapped[list['Publication']] = relationship(back_populates='company')
     authors:        Mapped[list['User']] = relationship(back_populates='company')
     subscriptions:  Mapped[list["Subscription"]] = relationship(back_populates='company')
 
@@ -66,7 +63,7 @@ class Subscriber(Base):
 class Subscription(Base):
     __tablename__ = 'Subscriptions'
     id:             Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    subscriber_id:  Mapped[int] = mapped_column(Integer, ForeignKey('Subscribers.id'))
+    subscriber_id:  Mapped[str] = mapped_column(Integer, ForeignKey('Subscribers.id'))
     company_id:     Mapped[str] = mapped_column(String, ForeignKey('Companies.id'))
 
     # Relationships

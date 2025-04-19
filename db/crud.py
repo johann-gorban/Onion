@@ -4,10 +4,9 @@ from datetime import datetime, timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy import create_engine, update, and_
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.future import select
 
-from models import Base, Company, Publication, Writer, Moderator
+from models import Base, Company, Publication, Author, Moderator
 from config import DB_PATH
 
 import asyncio

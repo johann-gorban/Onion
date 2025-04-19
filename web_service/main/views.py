@@ -4,6 +4,7 @@ from django.conf import settings
 from minio import Minio
 from minio.error import S3Error
 from bcrypt import bcrypt
+from json import json
 import uuid
 
 ENCODING = 'utf-8'
@@ -27,7 +28,9 @@ def search_posts(request):
 
 def view_post(request, post_id):
     """Страница публикации"""
-    print(post_id)
+    if request.method == 'POST':
+        posts = request.POST.get('posts')
+        posts =json.dumps(posts, ensure_ascii=False)
     return render(request, "post.html")
 
 

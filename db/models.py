@@ -3,17 +3,17 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from datetime import datetime
 
 
-'''
-Default class for tables
-'''
 class Base(DeclarativeBase):
+    '''
+    Default class for tables
+    '''
     pass
 
 
-'''
-Class for publication
-'''
 class Publication(Base):
+    '''
+    Class for publication
+    '''
     __tablename__ = 'Publications'
     id:             Mapped[str] = mapped_column(String, primary_key=True)
     title:          Mapped[str] = mapped_column(String)
@@ -30,10 +30,10 @@ class Publication(Base):
     company:        Mapped['Company'] = relationship(back_populates='publications')
 
 
-'''
-Class for company (organisation)
-'''
 class Company(Base):
+    '''
+    Class for company (organisation)
+    '''
     __tablename__ = 'Companies'
     id:             Mapped[str] = mapped_column(String, primary_key=True)
     name:           Mapped[str] = mapped_column(String)
@@ -45,10 +45,11 @@ class Company(Base):
     writers:        Mapped[list['Author']] = relationship(back_populates='company')
     subscriptions:  Mapped[list["Subscription"]] = relationship(back_populates="company")
 
-'''
-Abstract class for users
-'''
+
 class UserBase:
+    '''
+    Abstract class for users
+    '''
     id:         Mapped[str] = mapped_column(String, primary_key=True)
     first_name: Mapped[str] = mapped_column(String)
     last_name:  Mapped[str] = mapped_column(String)
@@ -57,10 +58,10 @@ class UserBase:
     role:       Mapped[str] = mapped_column(String)
 
 
-'''
-Class author
-'''
 class Author(UserBase, Base):
+    '''
+    Class author
+    '''
     __tablename__ = 'Authors'
     company_id:     Mapped[str] = mapped_column(String, ForeignKey('Companies.id'))
 
@@ -69,17 +70,17 @@ class Author(UserBase, Base):
     publications:   Mapped[list['Publication']] = relationship(back_populates='author')
 
 
-'''
-Class moderator
-'''
 class Moderator(UserBase, Base):
+    '''
+    Class moderator
+    '''
     __tablename__ = 'Moderators'
 
 
-'''
-Class for Telegram subscriber
-'''
 class Subscriber(Base):
+    '''
+    Class for Telegram subscriber
+    '''
     __tablename__ = 'Subscribers'
     id:             Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     telegram_id:    Mapped[str] = mapped_column(String)
@@ -87,10 +88,11 @@ class Subscriber(Base):
     # Relationships
     subscriptions:  Mapped[list['Subscription']] = relationship(back_populates='subscriber')
 
-'''
-Table with Telegram subscriptions and companies users subscribed on
-'''
+
 class Subscription(Base):
+    '''
+    Table with Telegram subscriptions and companies users subscribed on
+    '''
     __tablename__ = 'Subscriptions'
 
     id:             Mapped[int] = mapped_column(primary_key=True, autoincrement=True) 

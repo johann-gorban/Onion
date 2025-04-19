@@ -20,11 +20,11 @@ class Publication(Base):
     created_at:     Mapped[datetime] = mapped_column(DateTime)
 
     # Foreign keys
-    author_id:      Mapped[str] = mapped_column(String, ForeignKey('Authors.id'))
+    author_id:      Mapped[str] = mapped_column(String, ForeignKey('Users.id'))
     company_id:     Mapped[str] = mapped_column(String, ForeignKey('Companies.id'))
 
     # Relationships
-    author:         Mapped['Author'] = relationship(back_populates='publications')
+    author:         Mapped['User'] = relationship(back_populates='publications')
     company:        Mapped['Company'] = relationship(back_populates='publications')
 
 
@@ -37,30 +37,21 @@ class Company(Base):
 
     # Relationships
     publications:   Mapped[list['Publication']] = relationship(back_populates='company')
-    authors:        Mapped[list['Author']] = relationship(back_populates='company')
+    authors:        Mapped[list['User']] = relationship(back_populates='company')
     subscriptions:  Mapped[list["Subscription"]] = relationship(back_populates='company')
 
 
-class UserBase:
-    id:         Mapped[str] = mapped_column(String, primary_key=True)
-    first_name: Mapped[str] = mapped_column(String)
-    last_name:  Mapped[str] = mapped_column(String)
-    login:      Mapped[str] = mapped_column(String)
-    password:   Mapped[str] = mapped_column(String)
-    role:       Mapped[str] = mapped_column(String)
-
-
-class Author(UserBase, Base):
-    __tablename__ = 'Authors'
-    company_id:     Mapped[str] = mapped_column(String, ForeignKey('Companies.id'))
+class User(Base):
+    __tablename__ = 'Users'
+    id:             Mapped[str] = mapped_column(String, primary_key=True)
+    login:          Mapped[str] = mapped_column(String)
+    password:       Mapped[str] = mapped_column(String)
+    role:           Mapped[str] = mapped_column(String)
+    company_id:     Mapped[str] = mapped_column(String, ForeignKey('Companies.id'), nullable=True)
 
     # Relationships
-    company:        Mapped['Company'] = relationship(back_populates='authors')  # Исправлено с str на Company
-    publications:   Mapped[list['Publication']] = relationship(back_populates='author')
-
-
-class Moderator(UserBase, Base):
-    __tablename__ = 'Moderators'
+    company:        Mapped['Company'] = relationship(back_populates='authors')
+    publications:   Mapped['Publication'] = relationship(back_populates='author')
 
 
 class Subscriber(Base):
@@ -70,6 +61,7 @@ class Subscriber(Base):
 
     # Relationships
     subscriptions:  Mapped[list['Subscription']] = relationship(back_populates='subscriber')
+
 
 class Subscription(Base):
     __tablename__ = 'Subscriptions'

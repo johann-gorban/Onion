@@ -10,3 +10,7 @@ class UserExists(Exception):
 
 class CompanyNotFound(Exception):
     pass
+
+
+class ModeratorIsNotAuthor(Exception):
+    pass

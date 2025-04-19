@@ -178,3 +178,7 @@ pyrightconfig.json
 .idea
 
 *.pem
+
+.rdb
+.aof
+redisdata/

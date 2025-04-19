@@ -6,8 +6,11 @@ from main.auth_views import (
 
 urlpatterns = [
     path('', views.index_page, name='home'),
-    path('posts/search/', views.searching_publications,
-         name='searching_publications'),
+    path(
+        'posts/search/',
+        views.searching_publications,
+        name='searching_publications'
+    ),
     path('organizations/', views.organizations_list, name='organizations_list'),
 
     path('posts/<str:id>/', views.publication, name='publication'),
@@ -20,7 +23,7 @@ urlpatterns = [
     path('organizations/delete/<str:id>/',
          views.remove_organization, name='remove_organization'),
 
-    path('writer/register/', views.register_writer, name="register_writer"),
+    path('writer/create/', views.create_writer, name="create_writer"),
     path('writer/delete/', views.delete_writer, name="delete_writer"),
 
     path('login/', login_view, name='login'),

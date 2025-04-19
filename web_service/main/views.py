@@ -33,8 +33,6 @@ def create_publication(request):
         content = request.POST.get('content')
         main_image_url = request.FILES.get('logo')
 
-        # if main_image_url:
-
     return render(request, "create_publication.html")
 
 

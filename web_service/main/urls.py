@@ -5,18 +5,17 @@ from main.auth_views import (
 )
 
 urlpatterns = [
-    path('', views.index_page, name='home'),
-    path('posts/search/', views.searching_posts, name='searching_posts'),
-
-    path('posts/<str:id>/', views.view_posts, name='view_posts'),
-    path('posts/create/', views.create_posts, name='create_posts'),
-    path('posts/delete/<str:id>/', views.remove_posts, name='remove_posts'),
+    path('', views.view_index, name='home'),
+    path('posts/search/', views.search_posts, name='search_posts'),
+    path('posts/<str:post_id>/', views.view_post, name='view_post'),
+    path('posts/create/', views.create_post, name='create_post'),
+    path('posts/delete/<str:post_id>/', views.delete_post, name='delete_post'),
 
     path('organizations/create/', views.create_organization,
          name='create_organization'),
-    path('organizations/delete/<str:id>/',
-         views.remove_organization, name='remove_organization'),
-    path('organizations/', views.organizations_list, name='organizations_list'),
+    path('organizations/delete/<str:organization_id>/',
+         views.delete_organization, name='delete_organization'),
+    path('organizations/', views.view_organizations, name='organizations_list'),
 
     path('writer/create/', views.create_writer, name="create_writer"),
     path('writer/delete/', views.delete_writer, name="delete_writer"),

@@ -4,31 +4,27 @@ from main.decorators import role_required
 from django.core.files.storage import default_storage
 
 
-def index_page(request):
+def view_index(request):
     """
     Главная страница. Возвращает простой ответ 'Ok' для проверки работы сервера
     """
     return render(request, "index.html")
 
 
-def searching_publications(request):
+def search_posts(request):
     """Страница поиска публикаций. Рендерит шаблон searching_page.html."""
     return render(request, "searching_page.html")
 
 
-def posts_list(request):
-    """Страница со списком организаций. Рендерит шаблон postss_list.html."""
-    return render(request, "postss_list.html")
-
-
-def view_posts(request):
+def view_post(request, post_id):
     """Страница публикации. Передает данные в шаблон publication.html."""
-    data = dict()  # Заглушка для будущих данных
+    print(post_id)
+    # data = dict()  # Заглушка для будущих данных
     return render(request, "publication.html")
 
 
-@role_required('write')  # Требует права на запись (роль 'write')
-def create_publication(request):
+@role_required('write')
+def create_post(request):
     """Страница создания публикации."""
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -38,45 +34,54 @@ def create_publication(request):
     return render(request, "create_publication.html")
 
 
-@role_required('write')  # Требует права на запись (роль 'write')
-def remove_publication(request):
-    """Страница удаления публикации."""
+@role_required('moderator')
+def delete_post(request, post_id):
+    """Удаление поста"""
+    print(post_id)
+    return render(request, "remove_organizations.html")
+
+
+@role_required('write')
+def update_publication(request):
+    """Страница обновления публикации."""
     if request.method == 'POST':
-        id = request.POST.get('id')
+        post_id = request.POST.get('id')
     return render(request, "remove_publication.html")
 
 
-@role_required('moderator')  # Требует прав модератора
-def create_posts(request):
-    """Страница создания организации."""
+@role_required('moderator')
+def create_organization(request):
+    """Создание организации"""
     if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        image_url = request.FILES['logo']
-        print(image_url)
-        # path = default_storage.save('uploads/' + image_url.name, image_url)
-    return render(request, "create_posts.html")
+        user_id = request.POST.get('id')
+    return render(request, "remove_organizations.html")
 
 
-@role_required('moderator')  # Требует прав модератора
-def remove_posts(request):
-    """Страница удаления организации."""
+@role_required('moderator')
+def delete_organization(request, organization_id):
+    """Удаление организации"""
     if request.method == 'POST':
-        id = request.POST.get('id')
-    return render(request, "remove_postss.html")
+        user_id = request.POST.get('id')
+    return render(request, "remove_organizations.html")
 
 
-@role_required('moderator')  # Требует прав модератора
+@role_required('moderator')
+def view_organizations(request):
+    """Просмотр всех доступных организаций"""
+    return render(request, "remove_organizations.html")
+
+
+@role_required('moderator')
 def create_writer(request):
-    """Страница регистрации писателя."""
+    """Создание писателя"""
     if request.method == 'POST':
-        name = request.POST.get('posts_id')
+        user_id = request.POST.get('id')
     return render(request, "register_writer.html")
 
 
-@role_required('moderator')  # Требует прав модератора
+@role_required('moderator')
 def delete_writer(request):
-    """Страница удаления писателя."""
+    """Удаления писателя"""
     if request.method == 'POST':
-        id = request.POST.get('id')
+        user_id = request.POST.get('id')
     return render(request, "delete_writer.html")

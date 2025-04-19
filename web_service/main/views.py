@@ -3,8 +3,11 @@ from main.decorators import role_required
 from django.conf import settings
 from minio import Minio
 from minio.error import S3Error
+from bcrypt import bcrypt
 import uuid
 
+ENCODING = 'utf-8'
+ROUNDS = 12
 
 def view_index(request):
     """Главная страница"""
@@ -132,6 +135,7 @@ def create_writer(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         organization = request.POST.get('organization')
+        password = bcrypt.hashpw(password.encode(ENCODING), bcrypt.gensalt(rounds=ROUNDS))
         print(username, password, organization)
     return render(request, "create_writer.html")
 

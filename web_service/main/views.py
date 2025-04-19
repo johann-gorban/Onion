@@ -1,11 +1,13 @@
-from django.shortcuts import render, HttpResponse
-from main.decorators import role_required
-from django.conf import settings
-from minio import Minio
-from minio.error import S3Error
-import bcrypt
 import json
 import uuid
+
+import bcrypt
+from django.conf import settings
+from django.shortcuts import HttpResponse, render
+
+from main.decorators import role_required
+from minio import Minio
+from minio.error import S3Error
 
 ENCODING = 'utf-8'
 ROUNDS = 12
@@ -64,8 +66,8 @@ def view_post(request, post_id):
     """Страница публикации"""
     if request.method == 'POST':
         temp_data = []
-
         posts = json.dumps(temp_data[post_id], ensure_ascii=False)
+
     return render(request, "post.html")
 
 

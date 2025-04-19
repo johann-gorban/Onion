@@ -19,7 +19,8 @@ def view_index(request):
 
 def search_posts(request):
     """Страница поиска публикаций"""
-    return render(request, "searching_page.html")
+    # return render(request, "searching_page.html")
+    return HttpResponse("Ok")
 
 
 def view_post(request, post_id):

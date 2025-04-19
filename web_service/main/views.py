@@ -31,7 +31,8 @@ def view_index(request):
     )
     try:
         objects = minio_client.list_objects(
-            settings.MINIO_BUCKET_NAME, prefix="organizations/"
+            settings.MINIO_BUCKET_NAME,
+            prefix="organizations/"
         )
 
         for obj in objects:
@@ -41,8 +42,7 @@ def view_index(request):
                 obj.object_name
             )
 
-            data["images"].append(
-                {"url": image_url})
+            data["images"].append({"url": image_url})
 
     except S3Error as exc:
         print("Ошибка при получении изображений из MinIO:", exc)
@@ -105,7 +105,7 @@ def update_post(request):
 
 @role_required('moderator')
 def create_organization(request):
-    """Создание организации"""
+    """Создание организации с загрузкой изображения в MinIO"""
     if request.method == 'POST':
         name = request.POST.get('name')
         description = request.POST.get('description')
@@ -113,14 +113,6 @@ def create_organization(request):
 
         image = request.FILES.get('image')
         if image:
-            minio_client = Minio(
-                settings.MINIO_ENDPOINT,
-                access_key=settings.MINIO_ACCESS_KEY,
-                secret_key=settings.MINIO_SECRET_KEY,
-                secure=settings.MINIO_USE_HTTPS
-            )
-            file_name = f"{uuid.uuid4()}_{image.name}"
-
             try:
                 minio_client = Minio(
                     settings.MINIO_ENDPOINT,
@@ -169,6 +161,14 @@ def delete_organization(request):
 
 def view_organizations(request):
     """Просмотр всех доступных организаций"""
+    data = {
+        "organizations": [
+            {
+                "name": "test",
+                "descript": "test"
+            }
+        ]
+    }
     # get_all_organizations
     return render(request, "organization.html")
 
@@ -180,10 +180,11 @@ def create_writer(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         organization = request.POST.get('organization')
-        password = bcrypt.hashpw(
+
+        hashed_password = bcrypt.hashpw(
             password.encode(ENCODING), bcrypt.gensalt(rounds=ROUNDS)
         )
-        print(username, password, organization)
+        print(username, hashed_password, organization)
     return render(request, "create_writer.html")
 
 

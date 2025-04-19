@@ -9,39 +9,28 @@ from main.decorators import role_required
 from minio import Minio
 from minio.error import S3Error
 
-ENCODING = 'utf-8'
+ENCODING = "utf-8"
 ROUNDS = 12
 
 
 def view_index(request):
     """Главная страница"""
-    data = {
-        "posts": [
-            {
-                "name": "test",
-                "descript": "test"
-            }
-        ],
-        "images": []
-    }
+    data = {"posts": [{"name": "test", "descript": "test"}], "images": []}
 
     minio_client = Minio(
         settings.MINIO_ENDPOINT,
         access_key=settings.MINIO_ACCESS_KEY,
         secret_key=settings.MINIO_SECRET_KEY,
-        secure=settings.MINIO_USE_HTTPS
+        secure=settings.MINIO_USE_HTTPS,
     )
     try:
         objects = minio_client.list_objects(
-            settings.MINIO_BUCKET_NAME,
-            prefix="organizations/"
+            settings.MINIO_BUCKET_NAME, prefix="organizations/"
         )
 
         for obj in objects:
-
             image_url = minio_client.presigned_get_object(
-                settings.MINIO_BUCKET_NAME,
-                obj.object_name
+                settings.MINIO_BUCKET_NAME, obj.object_name
             )
 
             data["images"].append({"url": image_url})
@@ -64,63 +53,63 @@ def search_posts(request):
 
 def view_post(request, post_id):
     """Страница публикации"""
-    if request.method == 'POST':
+    if request.method == "POST":
         temp_data = []
         posts = json.dumps(temp_data[post_id], ensure_ascii=False)
 
     return render(request, "post.html")
 
 
-@role_required('writer')
+@role_required("writer")
 def create_post(request):
     """Страница создания публикации"""
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        content = request.POST.get('content')
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
         print(title, content)
         # отправляем запрос на сервер на создание публикации
 
     return render(request, "create_post.html")
 
 
-@role_required('writer')
+@role_required("writer")
 def delete_post(request):
     """Удаление поста"""
-    if request.method == 'POST':
-        post_id = request.POST.get('post_id')
+    if request.method == "POST":
+        post_id = request.POST.get("post_id")
         print(post_id)
         # запрос на удаление поста по id
     return HttpResponse("Ok")
 
 
-@role_required('writer')
+@role_required("writer")
 def update_post(request):
     """Страница обновления публикации."""
-    if request.method == 'POST':
-        post_id = request.POST.get('post_id')
-        title = request.POST.get('title')
-        content = request.POST.get('content')
+    if request.method == "POST":
+        post_id = request.POST.get("post_id")
+        title = request.POST.get("title")
+        content = request.POST.get("content")
 
         # update_post_by_id
     return HttpResponse("Ok")
 
 
-@role_required('moderator')
+@role_required("moderator")
 def create_organization(request):
     """Создание организации с загрузкой изображения в MinIO"""
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description')
+    if request.method == "POST":
+        name = request.POST.get("name")
+        description = request.POST.get("description")
         print(name, description)
 
-        image = request.FILES.get('image')
+        image = request.FILES.get("image")
         if image:
             try:
                 minio_client = Minio(
                     settings.MINIO_ENDPOINT,
                     access_key=settings.MINIO_ACCESS_KEY,
                     secret_key=settings.MINIO_SECRET_KEY,
-                    secure=settings.MINIO_USE_HTTPS
+                    secure=settings.MINIO_USE_HTTPS,
                 )
 
                 # Генерируем уникальное имя файла
@@ -136,7 +125,7 @@ def create_organization(request):
                     file_name,
                     image,
                     length=image.size,
-                    content_type=image.content_type
+                    content_type=image.content_type,
                 )
 
                 print(f"Изображение загружено: {file_name}")
@@ -144,17 +133,19 @@ def create_organization(request):
 
             except S3Error as exc:
                 print("Ошибка MinIO:", exc)
-                return render(request, "create_organization.html", {
-                    'error': 'Ошибка при загрузке изображения'
-                })
+                return render(
+                    request,
+                    "create_organization.html",
+                    {"error": "Ошибка при загрузке изображения"},
+                )
     return render(request, "create_organization.html")
 
 
-@role_required('moderator')
+@role_required("moderator")
 def delete_organization(request):
     """Удаление организации"""
-    if request.method == 'POST':
-        organization_id = request.POST.get('organization_id')
+    if request.method == "POST":
+        organization_id = request.POST.get("organization_id")
         # удаление организации по id
         print(organization_id)
 
@@ -163,25 +154,18 @@ def delete_organization(request):
 
 def view_organizations(request):
     """Просмотр всех доступных организаций"""
-    data = {
-        "organizations": [
-            {
-                "name": "test",
-                "descript": "test"
-            }
-        ]
-    }
+    data = {"organizations": [{"name": "test", "descript": "test"}]}
     # get_all_organizations
     return render(request, "organization.html")
 
 
-@role_required('moderator')
+@role_required("moderator")
 def create_writer(request):
     """Создание писателя"""
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        organization = request.POST.get('organization')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        organization = request.POST.get("organization")
 
         hashed_password = bcrypt.hashpw(
             password.encode(ENCODING), bcrypt.gensalt(rounds=ROUNDS)
@@ -190,10 +174,10 @@ def create_writer(request):
     return render(request, "create_writer.html")
 
 
-@role_required('moderator')
+@role_required("moderator")
 def delete_writer(request):
     """Удаления писателя"""
-    if request.method == 'POST':
-        user_id = request.POST.get('id')
+    if request.method == "POST":
+        user_id = request.POST.get("id")
         print(user_id)
     return HttpResponse("Ok")

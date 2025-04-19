@@ -128,3 +128,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Настройки сессии
 SESSION_COOKIE_AGE = 1209600  # 2 недели
 SESSION_SAVE_EVERY_REQUEST = True
+
+# Указываем использовать S3-совместимое хранилище
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Настройки MinIO (совместимого с S3 API)
+AWS_ACCESS_KEY_ID = 'minioadmin'
+AWS_SECRET_ACCESS_KEY = 'minioadmin'
+AWS_STORAGE_BUCKET_NAME = 'django-media'
+AWS_S3_ENDPOINT_URL = 'http://localhost:9001/'

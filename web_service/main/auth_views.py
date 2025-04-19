@@ -10,7 +10,7 @@ def login_view(request):
         # user = external_db.get_user(username, password)
         user = {
             "id": 123,
-            "user_role": "write"
+            "user_role": "moderator"
         }
 
         if user:

@@ -19,8 +19,34 @@ def view_index(request):
                 "name": "test",
                 "descript": "test"
             }
-        ]
+        ],
+        "images": []
     }
+
+    minio_client = Minio(
+        settings.MINIO_ENDPOINT,
+        access_key=settings.MINIO_ACCESS_KEY,
+        secret_key=settings.MINIO_SECRET_KEY,
+        secure=settings.MINIO_USE_HTTPS
+    )
+    try:
+        objects = minio_client.list_objects(
+            settings.MINIO_BUCKET_NAME, prefix="organizations/"
+        )
+
+        for obj in objects:
+
+            image_url = minio_client.presigned_get_object(
+                settings.MINIO_BUCKET_NAME,
+                obj.object_name
+            )
+
+            data["images"].append(
+                {"url": image_url})
+
+    except S3Error as exc:
+        print("Ошибка при получении изображений из MinIO:", exc)
+
     if not request.session:
         data = {
             "user_id": request.session["id"],
@@ -37,11 +63,7 @@ def search_posts(request):
 def view_post(request, post_id):
     """Страница публикации"""
     if request.method == 'POST':
-        temp_data = {
-            0: ["name", "descript"],
-            1: ["name1", "descript1"],
-            2: ["name2", "descript2"]
-        }
+        temp_data = []
 
         posts = json.dumps(temp_data[post_id], ensure_ascii=False)
     return render(request, "post.html")

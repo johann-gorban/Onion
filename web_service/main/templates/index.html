@@ -21,5 +21,13 @@
             </div>
         {% endif %}
     </div>
+    {% for post in posts %}
+        <p>{{ post.name }} | {{ post.descript }}</p>
+    {% endfor %}
+
+    {% for image in images %}
+        <img src="{{ image.url }}">
+    {% endfor %}
+   
 </div>
 {% endblock %}

@@ -1,26 +1,26 @@
 from django.urls import path
+
 from main import views
-from main.auth_views import (
-    login_view, logout_view, register_view
-)
+from main.auth_views import logout, moderator_login, writer_login
 
 urlpatterns = [
-    path('', views.index_page, name='home'),
-    path('posts/search/', views.searching_publications,
-         name='searching_publications'),
-    path('organizations/', views.organizations_list, name='organizations_list'),
+    path('', views.view_index, name='home'),
+    path('posts/search/', views.search_posts, name='search_posts'),
+    path('posts/<str:post_id>/', views.view_post, name='view_post'),
+    path('posts/create/', views.create_post, name='create_post'),
+    path('posts/delete/', views.delete_post, name='delete_post'),
+    path('posts/update/<str:post_id>/', views.update_post, name='update_post'),
 
-    path('/posts/id/', views.publication, name='publication'),
-    path('/posts/create/', views.create_publication, name='create_publication'),
-    path('/posts/delete/id/', views.remove_publication, name='remove_publication'),
+    path('organizations/create/', views.create_organization,
+         name='create_organization'),
+    path('organizations/delete/',
+         views.delete_organization, name='delete_organization'),
+    path('organizations/', views.view_organizations, name='organizations_list'),
 
-    path('/organizations/create/', views.create_organization, name='create_organization'),
-    path('/organizations/delete/id/', views.remove_organization, name='remove_organization'),
-
-    path('writer/register/', views.register_writer, name="register_writer"),
+    path('writer/create/', views.create_writer, name="create_writer"),
     path('writer/delete/', views.delete_writer, name="delete_writer"),
+    path('writer/login/', writer_login, name='writer_login'),
+    path('moderator/login/', moderator_login, name='moderator_login'),
 
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
-    path('register/', register_view, name='register'),
+    path('logout/', logout, name='logout'),
 ]

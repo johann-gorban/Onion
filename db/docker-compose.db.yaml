@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     container_name: postgres_container
@@ -51,7 +49,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    # restart: unless-stopped
+    restart: unless-stopped
     deploy:
       resources:
         limits:
@@ -81,26 +79,26 @@ services:
     networks:
       - postgres
 
-  # postgres_exporter:
-  #   container_name: exporter_container
-  #   image: prometheuscommunity/postgres-exporter:v0.17.1
-  #   environment:
-  #     DATA_SOURCE_URI: "postgres:5432/${PG_DB}?sslmode=disable"
-  #     DATA_SOURCE_USER: ${PG_NAME}
-  #     DATA_SOURCE_PASS: ${PG_PASSWORD}
-  #     PG_EXPORTER_EXTEND_QUERY_PATH: "/etc/postgres_exporter/queries.yaml"
-  #   volumes:
-  #     - ./queries.yaml:/etc/postgres_exporter/queries.yaml:ro
-  #   ports:
-  #     - "9187:9187"
-  #   restart: unless-stopped
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '0.2'
-  #         memory: 500M
-  #   networks:
-  #     - postgres
+  postgres_exporter:
+    container_name: exporter_container
+    image: prometheuscommunity/postgres-exporter:v0.17.1
+    environment:
+      DATA_SOURCE_URI: "postgres:5432/${PG_DB}?sslmode=disable"
+      DATA_SOURCE_USER: ${PG_NAME}
+      DATA_SOURCE_PASS: ${PG_PASSWORD}
+      PG_EXPORTER_EXTEND_QUERY_PATH: "/etc/postgres_exporter/queries.yaml"
+    volumes:
+      - ./queries.yaml:/etc/postgres_exporter/queries.yaml:ro
+    ports:
+      - "9187:9187"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 500M
+    networks:
+      - postgres
 
 volumes:
   vectodb-data:

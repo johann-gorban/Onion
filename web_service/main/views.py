@@ -3,11 +3,7 @@ from main.decorators import role_required
 from django.conf import settings
 from minio import Minio
 from minio.error import S3Error
-<<<<<<< HEAD
-from bcrypt import bcrypt
-=======
 import bcrypt
->>>>>>> 1472cc6c6ed70c85b3620feee19d509f390d9bac
 import json
 import uuid
 
@@ -41,16 +37,11 @@ def search_posts(request):
 def view_post(request, post_id):
     """Страница публикации"""
     if request.method == 'POST':
-<<<<<<< HEAD
-        temp_data = {0: ["name", "descript"], 1: ["name1", "descript1"], 2: ["name2", "descript2"]} # Временная заглушка для тестирования
-=======
         temp_data = {
             0: ["name", "descript"],
             1: ["name1", "descript1"],
             2: ["name2", "descript2"]
         }
-
->>>>>>> 1472cc6c6ed70c85b3620feee19d509f390d9bac
         posts = json.dumps(temp_data[post_id], ensure_ascii=False)
     return render(request, "post.html")
 
@@ -155,6 +146,14 @@ def delete_organization(request):
 
 def view_organizations(request):
     """Просмотр всех доступных организаций"""
+    data = {
+        "organizations": [
+            {
+                "name": "test",
+                "descript": "test"
+            }
+        ]
+    }
     # get_all_organizations
     return render(request, "organization.html")
 

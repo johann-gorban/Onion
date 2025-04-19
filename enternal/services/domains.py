@@ -32,7 +32,7 @@ class Company(DomainEntity):
     name: str
     description: str
     image_url: str
-    authors: list[User] = []
+    authors: list["User"] = []
     subscriptions: list["Subscription"] = []
 
     def add_author(self, user: User) -> None:
@@ -51,9 +51,9 @@ class Publication(DomainEntity):
     content: str
     main_image_url: str
     created_at: datetime
-    author: User
+    author: "User"
 
-    def can_edit(self, user: User) -> bool:
+    def can_edit(self, user: "User") -> bool:
         return user == self.author or user.has_permission("admin")
 
 
@@ -61,21 +61,21 @@ class Subscriber(DomainEntity):
     telegram_id: str
     subscriptions: list["Subscription"] = []
 
-    def subscribe_to(self, company: Company) -> None:
+    def subscribe_to(self, company: "Company") -> None:
         if not any(sub.company == company for sub in self.subscriptions):
             self.subscriptions.append(
                 Subscription(subscriber=self, company=company)
             )
 
-    def unsubscribe_from(self, company: Company) -> None:
+    def unsubscribe_from(self, company: "Company") -> None:
         self.subscriptions = [
             sub for sub in self.subscriptions if sub.company != company
         ]
 
 
 class Subscription(DomainEntity):
-    subscriber: Subscriber
-    company: Company
+    subscriber: "Subscriber"
+    company: "Company"
 
     @property
     def is_active(self) -> bool:

@@ -51,7 +51,7 @@ class Publication(DomainEntity):
     content: str
     main_image_url: str
     created_at: datetime
-    author: "User"
+    author: str  # TODO в сервисе подтянуть юзера
 
     def can_edit(self, user: "User") -> bool:
         return user == self.author or user.has_permission("admin")
@@ -76,7 +76,3 @@ class Subscriber(DomainEntity):
 class Subscription(DomainEntity):
     subscriber: "Subscriber"
     company: "Company"
-
-    @property
-    def is_active(self) -> bool:
-        return datetime.now() < self.expires_at  # Пример бизнес-логики

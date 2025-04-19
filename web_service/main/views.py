@@ -4,11 +4,11 @@ from main.decorators import role_required
 
 
 def index_page(request):
-    return HttpResponse("Ok")
+    return render(request, "index.html")
 
 
 def searching_publications(request):
-    return render(request, "searching_page.html")
+    return HttpResponse("Это поиск")
 
 
 def organizations_list(request):
@@ -33,6 +33,10 @@ def remove_publication(request):
 
 @role_required('moderator')
 def create_organization(request):
+    print(
+        request.session['user_id'],
+        request.session['user_role']
+    )
     return render(request, "create_organization.html")
 
 
@@ -49,13 +53,3 @@ def register_writer(request):
 @role_required('moderator')
 def delete_writer(request):
     return render(request, "delete_writer.html")
-
-
-def login(request):
-    request.session['user_id'] = user.id
-    return redirect('home')
-
-
-def logout(request):
-    del request.session['user_id']
-    return redirect('home')

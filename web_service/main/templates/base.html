@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Агрегатор студенческих организаций</title>
+</head>
+
+<body>
+    <header>
+        {% if 'user_id' in request.session %}
+        <p>Вы вошли как {{ request.session.user_id }}
+            ({{ request.session.user_role|default:'гость' }})</p>
+        <a href="{% url 'logout' %}">Выйти</a>
+        {% else %}
+        <a href="{% url 'login' %}">Войти</a> |
+        <a href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+
+</html>

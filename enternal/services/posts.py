@@ -1,4 +1,4 @@
-from enternal.services.models.domains import Publication, User
+from enternal.services.models.domains import Publication
 from enternal.storages.sqlalchemy_db import db
 
 

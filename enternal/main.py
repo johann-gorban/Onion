@@ -1,7 +1,22 @@
+import os
+from collections.abc import Sequence
+
 from fastapi import FastAPI
 
-from handlers.main import router
+from config import Config
+from handlers import setup_routers
+from storages.engine import Engine
 
-app = FastAPI()
+CONF_FILE = ".env"
 
-app.include_router(router)
+
+
+config_path = os.path.join(os.path.dirname(__file__), CONF_FILE)
+config = Config(config_path=config_path)
+engine = Engine(config=config)
+app = FastAPI(
+    on_startup=engine.connect(),
+    on_shutdown=...
+)
+
+setup_routers(app)

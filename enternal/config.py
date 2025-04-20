@@ -35,11 +35,10 @@ class Config:
     def pg(self):
         if self._pg is None:
             load_env(self.config_path)
-            self._pg = PostgreConfig(
-                user=os.environ["PG_NAME"],
-                password=os.environ["PG_PASSWORD"],
-                db_name=os.environ["PG_DB"],
-                port=int(os.environ.get("PG_PORT", DEFAULT_PG_PORT)),
-                host=os.environ.get("PG_PORT", DEFAULT_PG_HOST)
-            )
+            self._pg = PostgreConfig()
+            self._pg.user = os.environ["PG_NAME"]
+            self._pg.password = os.environ["PG_PASSWORD"]
+            self._pg.db_name = os.environ["PG_DB"]
+            self._pg.port = int(os.environ.get("PG_PORT", DEFAULT_PG_PORT))
+            self._pg.host = os.environ.get("PG_HOST", DEFAULT_PG_HOST)
         return self._pg

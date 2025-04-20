@@ -1,5 +1,4 @@
 import os
-from collections.abc import Sequence
 
 from fastapi import FastAPI
 
@@ -9,14 +8,12 @@ from storages.engine import Engine
 
 CONF_FILE = ".env"
 
-
-
 config_path = os.path.join(os.path.dirname(__file__), CONF_FILE)
 config = Config(config_path=config_path)
 engine = Engine(config=config)
 app = FastAPI(
-    on_startup=engine.connect(),
-    on_shutdown=...
+    on_startup=[engine.connect],
+    on_shutdown=[engine.disconnect]
 )
 
 setup_routers(app)

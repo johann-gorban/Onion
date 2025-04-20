@@ -1,10 +1,8 @@
-from typing import Optional
-
 from enternal.services.models.domains import Publication, User
+from enternal.storages.sqlalchemy_db import db
 
-
-async def get_post_by_id(post: Publication) -> Optional["Publication"]:
-    """Получение публикации по ID"""
+async def get_post_by_id(post_id: str) -> Publication | None:
+    return await db.get_publication(post_id)
 
 
 async def get_posts_by_author(author: "User") -> list["Publication"]:

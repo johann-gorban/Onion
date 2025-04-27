@@ -1,5 +1,5 @@
-from enternal.services.models.domains import Publication
-from enternal.storages.sqlalchemy_db import db
+from services.models.domains import Publication
+from storages.sqlalchemy_db import db
 
 
 async def get_post_by_id(post_id: str) -> Publication | None:
